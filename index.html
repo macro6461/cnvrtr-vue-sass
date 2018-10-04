@@ -20,7 +20,7 @@
         <h1 class="welcome">Welcome to Cnvrtr</h1>
     </div>
 
-    <div id="app-5">
+    <div id="app-intro">
 
       <div class="start-container" v-on:click="hideCnvrtButton"><h1 class="start">{{ message }}</h1></div>
     </div>
@@ -43,12 +43,13 @@
   })
 
   var app5 = new Vue({
-    el: '#app-5',
+    el: '#app-intro',
     data: {
       message: 'Start Cnvrsn'
     },
     methods: {
       hideCnvrtButton: function () {
+        document.getElementsByClassName("start-container")[0].classList.add("stop-blink")
         this.message = "Let's go!"
         debugger
         setTimeout(function(){

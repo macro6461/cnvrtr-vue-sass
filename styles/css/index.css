@@ -13,9 +13,12 @@ h1 {
 .start-container {
   cursor: pointer;
   display: none;
-  animation: start-slide-in 2s; }
+  animation: start-slide-in 2s infinite; }
   .start-container .start {
     animation: h1-slide-in 2s; }
+
+.stop-blink {
+  animation: none; }
 
 .cnvrt-away {
   animation: start-slide-out 2s; }
@@ -42,12 +45,12 @@ h1 {
     opacity: 1; } }
 
 @keyframes start-slide-in {
-  from {
-    transform: translate(-900px);
+  0% {
     opacity: 0; }
-  to {
-    transform: translate(0px);
-    opacity: 1; } }
+  50% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
 
 @keyframes start-slide-out {
   from {
@@ -64,13 +67,3 @@ h1 {
   to {
     transform: translate(-100%);
     opacity: 0; } }
-
-@keyframes h1-slide-in {
-  from {
-    transform: rotateX(90deg);
-    transform-origin: top;
-    opacity: 0; }
-  to {
-    transform: rotateX(0deg);
-    transform-origin: top;
-    opacity: 1; } }
