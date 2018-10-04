@@ -7,6 +7,7 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="js/index.js"></script>
     <link rel="stylesheet" href="styles/css/index.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -21,24 +22,36 @@
     </div>
 
     <div id="app-intro">
-
       <div class="start-container" v-on:click="hideCnvrtButton"><h1 class="start">{{ message }}</h1></div>
     </div>
 
 
-    <div id="app">
-
-    </div>
+    <div id="app-cnvrt">
+        <input class="input from" placeholder="0.00" v-on:keyup="cnvrtTemp" type="number" step="0.01">
+        <i class="fas fa-exchange-alt"></i>
+        <p style="display: inline-block;">
+          {{message}}
+        </p>
+      </div>
 
   </body>
 
   <script>
 
 
-  var app = new Vue({
-    el: '#app',
+  var appCnvrt = new Vue({
+    el: '#app-cnvrt',
     data: {
-      message: 'Hello Vue!'
+      message: ''
+    },
+    methods:{
+      cnvrtTemp: function(){
+        var fhr = this.$el.children[0].value - 32
+        console.log(this.$el.children[0].value)
+        debugger
+        var num = 5 / 9
+        this.message = fhr * num
+      }
     }
   })
 
@@ -51,7 +64,7 @@
       hideCnvrtButton: function () {
         document.getElementsByClassName("start-container")[0].classList.add("stop-blink")
         this.message = "Let's go!"
-        debugger
+
         setTimeout(function(){
           document.getElementsByClassName("start-container")[0].classList.add("cnvrt-away")
           document.getElementsByClassName("h1-container")[0].classList.add("start-away")
