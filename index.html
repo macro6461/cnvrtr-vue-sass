@@ -37,6 +37,7 @@
 
       <!-- USER PICKS WHAT TO CONVERT from AND to -->
       <div id="app-start">
+
         <div class="input-containers">
           <input required class="cnvrt-input from" placeholder="FROM" v-on:keyup="storeFirstCnvrtType" type="text" id="first-params" >
         </div>
@@ -51,12 +52,13 @@
         <p>
           <i class="fas fa-exclamation-triangle"></i> &nbsp; System currently supports temperature cnvrsn only
         </p>
-        <button class="cnvrt-btn">START CNVRTNG &nbsp;<i class="fas fa-sign-in-alt"></i></button>
+        <button class="cnvrt-btn" v-on:click="cnvrtType">START CNVRTNG &nbsp;<i class="fas fa-sign-in-alt"></i></button>
       </div>
 
       <!-- IF USER TYPES temperature related items SHOW #app-temp -->
 
       <div id="app-temp">
+        <h1>TEMPERATURE CNVRSN</h1>
         <input required class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempF" type="number" step="0.01">&#8457;</input>
         <i class="fas fa-exchange-alt cnvrt-icon"></i>
         <p style="display: inline-block;">
@@ -91,10 +93,10 @@
         this.autoCompSecond()
       },
       autoCompFirst: function(){
-        debugger
         $("#first-params").autocomplete({
           source: this.params
         });
+
       },
       autoCompSecond: function(){
         $("#second-params").autocomplete({
@@ -102,7 +104,13 @@
         });
       },
       cnvrtType: function(){
+        this.firstCnvrt = this.$el.firstElementChild.firstElementChild.value.toUpperCase()
+        this.secondCnvrt = this.$el.children[2].firstElementChild.value.toUpperCase()
 
+        if (this.params.includes(this.firstCnvrt) && this.params.includes(this.firstCnvrt)){
+          $('#app-start')[0].style.display = "none"
+          $('#app-temp')[0].classList.add("show")
+        }
       }
     }
   })
@@ -114,19 +122,19 @@
     },
     methods:{
       cnvrtTempF: function(){
-        if (this.$el.children[0].value == ""){
+        if (this.$el.children[1].value == ""){
           this.message = ""
         } else {
-          this.message = ((this.$el.children[0].value - 32) * (5 / 9)).toFixed(1)
+          this.message = ((this.$el.children[1].value - 32) * (5 / 9)).toFixed(1)
         }
 
       },
       cnvrtTempC: function(){
-        debugger
-        if (this.$el.children[3].value == ""){
-          this.$el.children[0].value = ""
+
+        if (this.$el.children[4].value == ""){
+          this.$el.children[1].value = ""
         } else {
-          this.$el.children[0].value = ((this.$el.children[3].value * (9 / 5)) + 32).toFixed(1)
+          this.$el.children[1].value = ((this.$el.children[4].value * (9 / 5)) + 32).toFixed(1)
         }
       }
     }
