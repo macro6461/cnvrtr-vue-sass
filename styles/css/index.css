@@ -17,9 +17,34 @@ h1 {
   .start-container .start {
     animation: h1-slide-in 2s; }
 
-.input {
-  padding-left: 10px;
-  padding-right: 10px; }
+#app-cnvrt {
+  display: none; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+#app-cnvrt.show {
+  width: 80%;
+  height: auto;
+  font-size: 20px;
+  padding-top: 20px;
+  display: flex;
+  margin: auto;
+  justify-content: center; }
+  #app-cnvrt.show .cnvrt-icon {
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-top: 5px; }
+  #app-cnvrt.show .cnvrt-input {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px; }
 
 .stop-blink {
   animation: none; }

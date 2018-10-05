@@ -27,11 +27,12 @@
 
 
     <div id="app-cnvrt">
-        <input class="input from" placeholder="0.00" v-on:keyup="cnvrtTemp" type="number" step="0.01">
-        <i class="fas fa-exchange-alt"></i>
+        <input class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempF" type="number" step="0.01">&#8457;</input>
+        <i class="fas fa-exchange-alt cnvrt-icon"></i>
         <p style="display: inline-block;">
-          {{message}}
+          <!-- {{message}} -->
         </p>
+        <input class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempC" type="number" step="0.01" v-bind:value=message>&#8451;</input>
       </div>
 
   </body>
@@ -45,12 +46,21 @@
       message: ''
     },
     methods:{
-      cnvrtTemp: function(){
-        var fhr = this.$el.children[0].value - 32
-        console.log(this.$el.children[0].value)
+      cnvrtTempF: function(){
+        if (this.$el.children[0].value == ""){
+          this.message = ""
+        } else {
+          this.message = ((this.$el.children[0].value - 32) * (5 / 9)).toFixed(1)
+        }
+
+      },
+      cnvrtTempC: function(){
         debugger
-        var num = 5 / 9
-        this.message = fhr * num
+        if (this.$el.children[3].value == ""){
+          this.$el.children[0].value = ""
+        } else {
+          this.$el.children[0].value = ((this.$el.children[3].value * (9 / 5)) + 32).toFixed(1)
+        }
       }
     }
   })
@@ -62,19 +72,21 @@
     },
     methods: {
       hideCnvrtButton: function () {
-        document.getElementsByClassName("start-container")[0].classList.add("stop-blink")
+        $(".start-container")[0].classList.add("stop-blink")
         this.message = "Let's go!"
-
         setTimeout(function(){
-          document.getElementsByClassName("start-container")[0].classList.add("cnvrt-away")
-          document.getElementsByClassName("h1-container")[0].classList.add("start-away")
+          $(".start-container")[0].classList.add("cnvrt-away")
+          $(".h1-container")[0].classList.add("start-away")
         }, 1000)
         setTimeout(function(){
-          document.getElementsByClassName("start-container")[0].style.display = "none"
-          document.getElementsByClassName("start-container")[0].classList.remove("cnvrt-away")
-          document.getElementsByClassName("h1-container")[0].style.display = "none"
-          document.getElementsByClassName("h1-container")[0].classList.remove("cnvrt-away")
-        }, 2500)
+          $(".start-container")[0].style.display = "none"
+          $(".start-container")[0].classList.remove("cnvrt-away")
+          $(".h1-container")[0].style.display = "none"
+          $(".h1-container")[0].classList.remove("cnvrt-away")
+        }, 2000)
+        setTimeout(function(){
+          $("#app-cnvrt")[0].classList.add("show")
+        }, 2000)
       }
     }
   })
