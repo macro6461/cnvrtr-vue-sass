@@ -7,6 +7,9 @@
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="js/index.js"></script>
     <link rel="stylesheet" href="styles/css/index.css">
@@ -22,26 +25,90 @@
     </div>
 
     <div id="app-intro">
-      <div class="start-container" v-on:click="hideCnvrtButton"><h1 class="start">{{ message }}</h1></div>
+      <div class="start-container" v-on:click="hideCnvrtButton"><h1 class="start" v-html="legacySystemHTML"></h1></div>
+      <!-- {{ message }} -->
     </div>
 
 
+    <!--CONSIDER PUTTING METHODS INTO #app-cnvrt AND PASS DOWN AS PROPS --->
+
+
     <div id="app-cnvrt">
-        <input class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempF" type="number" step="0.01">&#8457;</input>
+
+      <!-- USER PICKS WHAT TO CONVERT from AND to -->
+      <div id="app-start">
+        <div class="input-containers">
+          <input required class="cnvrt-input from" placeholder="FROM" v-on:keyup="storeFirstCnvrtType" type="text" id="first-params" >
+        </div>
+
+        <i class="fas fa-exchange-alt cnvrt-icon"></i>
+
+        <div class="input-containers">
+          <input required class="cnvrt-input to" placeholder="TO" v-on:keyup="storeSecondCnvrtType" type="text" id="second-params">
+        </div>
+
+        <br />
+        <p>
+          <i class="fas fa-exclamation-triangle"></i> &nbsp; System currently supports temperature cnvrsn only
+        </p>
+        <button class="cnvrt-btn">START CNVRTNG &nbsp;<i class="fas fa-sign-in-alt"></i></button>
+      </div>
+
+      <!-- IF USER TYPES temperature related items SHOW #app-temp -->
+
+      <div id="app-temp">
+        <input required class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempF" type="number" step="0.01">&#8457;</input>
         <i class="fas fa-exchange-alt cnvrt-icon"></i>
         <p style="display: inline-block;">
           <!-- {{message}} -->
         </p>
-        <input class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempC" type="number" step="0.01" v-bind:value=message>&#8451;</input>
+        <input required class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempC" type="number" step="0.01" v-bind:value=message>&#8451;</input>
       </div>
+    </div>
 
   </body>
 
   <script>
 
+  var params = ['FAHRENHEIT', 'CELSIUS', 'FINLAND', 'FEET', 'CENTIMETERS']
 
-  var appCnvrt = new Vue({
-    el: '#app-cnvrt',
+
+  var appStart = new Vue ({
+    el: '#app-start',
+    data: {
+      firstCnvrt: '',
+      secondCnvrt: '',
+      params: params,
+    },
+    methods: {
+      storeFirstCnvrtType: function(){
+        this.firstCnvrt = this.$el.firstElementChild.firstElementChild.value.toUpperCase()
+        this.autoCompFirst()
+      },
+      storeSecondCnvrtType: function(){
+
+        this.secondCnvrt = this.$el.children[2].firstElementChild.value.toUpperCase()
+        this.autoCompSecond()
+      },
+      autoCompFirst: function(){
+        debugger
+        $("#first-params").autocomplete({
+          source: this.params
+        });
+      },
+      autoCompSecond: function(){
+        $("#second-params").autocomplete({
+          source: this.params
+        });
+      },
+      cnvrtType: function(){
+
+      }
+    }
+  })
+
+  var appTemp = new Vue({
+    el: '#app-temp',
     data: {
       message: ''
     },
@@ -68,12 +135,14 @@
   var app5 = new Vue({
     el: '#app-intro',
     data: {
-      message: 'Start Cnvrsn'
+      legacySystemHTML: `
+      Set Cnvrsn <i class="far fa-keyboard" style="vertical-align: bottom;"></i>
+      `
     },
     methods: {
       hideCnvrtButton: function () {
         $(".start-container")[0].classList.add("stop-blink")
-        this.message = "Let's go!"
+        this.legacySystemHTML = "Let's go!"
         setTimeout(function(){
           $(".start-container")[0].classList.add("cnvrt-away")
           $(".h1-container")[0].classList.add("start-away")

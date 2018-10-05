@@ -9,23 +9,71 @@ h1{
   text-align: center;
 }
 
+input{
+  text-transform:uppercase;
+}
+
+.cnvrt-btn{
+  background-color: #9370DB;
+  color: white;
+  padding: 10px;
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+
+}
+
 .welcome{
     animation: h1-fade-in 2s;
+}
+
+.input-containers{
+  position: relative;
+  display: inline-block;
+}
+
+.auto-comp{
+  background-color: white;
+  border: solid 1px black;
+  vertical-align: center;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 30px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
 }
 
 .start-container{
   cursor: pointer;
   display: none;
   animation: start-slide-in 2s infinite;
-
   .start{
     animation: h1-slide-in 2s;
   }
 
 }
-
 #app-cnvrt{
   display: none;
+
+  #app-start{
+    text-align: center;
+  }
+
+  #app-temp {
+    display: none;
+  }
+
+  #app-temp.show{
+    display: block;
+    margin: auto
+  }
+
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -35,7 +83,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 #app-cnvrt.show{
-  width: 80%;
+  position: fixed; /* or absolute */
+  top: 40%;
+  width: 100%;
   height: auto;
   font-size: 20px;
   padding-top: 20px;
