@@ -36,7 +36,7 @@
     <div id="app-cnvrt">
 
       <!-- USER PICKS WHAT TO CONVERT from AND to -->
-      <div id="app-start">
+      <form id="app-start" v-on:submit="cnvrtType">
 
         <div class="input-containers">
           <input required class="cnvrt-input from" placeholder="FROM" v-on:keyup="storeFirstCnvrtType" type="text" id="first-params" >
@@ -49,11 +49,15 @@
         </div>
 
         <br />
-        <p>
+        <p class="system-p">
           <i class="fas fa-exclamation-triangle"></i> &nbsp; System currently supports temperature cnvrsn only
         </p>
-        <button class="cnvrt-btn" v-on:click="cnvrtType">START CNVRTNG &nbsp;<i class="fas fa-sign-in-alt"></i></button>
-      </div>
+        <div class="cnvrt-btn-container">
+          <input class="cnvrt-btn" type="submit" value="START CNVRTNG">
+          &nbsp;<i class="fas fa-sign-in-alt"></i>
+        </div>
+
+      </form>
 
       <!-- IF USER TYPES temperature related items SHOW #app-temp -->
 
@@ -65,14 +69,47 @@
           <!-- {{message}} -->
         </p>
         <input required class="cnvrt-input from" placeholder="0" v-on:keyup="cnvrtTempC" type="number" step="0.01" v-bind:value=message>&#8451;</input>
+
+          <button class="back-btn" v-on:click="backFunc">
+          &nbsp;<i class="fas fa-arrow-circle-left"></i>&nbsp;BACK</button>
+
       </div>
+
+        <div id="app-dist" >
+          <!-- <app-dist-container :back-function="backFunc" :to="to" :from="from" :message="message">
+
+          </app-dist-container> -->
+          <h1>LENGTH CNVRSN</h1>
+              <input required class="cnvrt-input from" placeholder="0" v-on:keyup="inchesToFeet" type="number" step="0.01">{{from}}</input>
+              <i class="fas fa-exchange-alt cnvrt-icon"></i>
+              <p style="display: inline-block;">
+
+              </p>
+              <input required class="cnvrt-input from" placeholder="0" v-on:keyup="feetToInches" type="number" step="0.01" v-bind:value=message>{{to}}</input>
+
+                <button class="back-btn" v-on:click="backFunc">
+                &nbsp;<i class="fas fa-arrow-circle-left"></i>&nbsp;BACK</button>
+
+        </div>
+
+
+
+      <div id="app-fail">
+
+        <p><i class="fas fa-ban" style="color: red;"></i> Unable to perform cnvrsn</p>
+
+      </div>
+
     </div>
 
   </body>
 
   <script>
 
-  var params = ['FAHRENHEIT', 'CELSIUS', 'FINLAND', 'FEET', 'CENTIMETERS']
+
+  var paramsForAutoComp = ['FAHRENHEIT', 'CELSIUS','KILOGRAMS', 'POUNDS', 'TONS', 'OUNCES', 'FEET', 'CENTIMETERS', 'YARDS', 'METERS', 'INCHES', 'KILOMETERS', 'MILES']
+
+  var paramsObj = {temp: ['FAHRENHEIT', 'CELSIUS'], wght: ['KILOGRAMS', 'POUNDS', 'TONS', 'OUNCES' ], dist: ['FEET', 'CENTIMETERS', 'YARDS', 'METERS', 'INCHES', 'KILOMETERS', 'MILES']}
 
 
   var appStart = new Vue ({
@@ -80,7 +117,8 @@
     data: {
       firstCnvrt: '',
       secondCnvrt: '',
-      params: params,
+      paramsObj: paramsObj,
+      paramsForAutoComp: paramsForAutoComp
     },
     methods: {
       storeFirstCnvrtType: function(){
@@ -88,29 +126,45 @@
         this.autoCompFirst()
       },
       storeSecondCnvrtType: function(){
-
         this.secondCnvrt = this.$el.children[2].firstElementChild.value.toUpperCase()
         this.autoCompSecond()
       },
       autoCompFirst: function(){
+        debugger
         $("#first-params").autocomplete({
-          source: this.params
+          source: this.paramsForAutoComp
         });
-
       },
       autoCompSecond: function(){
         $("#second-params").autocomplete({
-          source: this.params
+          source: this.paramsForAutoComp
         });
       },
-      cnvrtType: function(){
+      cnvrtType: function(event){
+
+        event.preventDefault()
+
         this.firstCnvrt = this.$el.firstElementChild.firstElementChild.value.toUpperCase()
         this.secondCnvrt = this.$el.children[2].firstElementChild.value.toUpperCase()
 
-        if (this.params.includes(this.firstCnvrt) && this.params.includes(this.firstCnvrt)){
-          $('#app-start')[0].style.display = "none"
+        if (this.paramsObj.temp.includes(this.firstCnvrt) && this.paramsObj.temp.includes(this.secondCnvrt)){
+          this.$el.style.display = "none"
           $('#app-temp')[0].classList.add("show")
+        } else if (this.paramsObj.wght.includes(this.firstCnvrt) && this.paramsObj.wght.includes(this.secondCnvrt)){
+
+        } else if (this.paramsObj.dist.includes(this.firstCnvrt) && this.paramsObj.dist.includes(this.secondCnvrt)){
+          this.$el.style.display = "none"
+          $('#app-dist')[0].classList.add("show")
+        } else {
+          $('#app-fail')[0].classList.add("show")
+          setTimeout(function(){
+            $('#app-fail')[0].classList.remove("show")
+          }, 2000)
         }
+      },
+      backFunc: function(){
+        console.log("yo")
+        $('#app-start')[0].style.display = "block"
       }
     }
   })
@@ -130,12 +184,83 @@
 
       },
       cnvrtTempC: function(){
-
         if (this.$el.children[4].value == ""){
           this.$el.children[1].value = ""
         } else {
           this.$el.children[1].value = ((this.$el.children[4].value * (9 / 5)) + 32).toFixed(1)
         }
+      },
+      backFunc: function(){
+        this.$el.classList.remove("show")
+        $('#app-start')[0].style.display = "block"
+      }
+    }
+  })
+
+  // Vue.component('app-dist-container', {
+  //   props: ['backFunction', 'to', 'from', 'message'],
+  //   template: `
+  //   <div>
+  //     <h1>LENGTH CNVRSN</h1>
+  //     <input required class="cnvrt-input from" placeholder="0" v-on:keyup="inchesToFeet" type="number" step="0.01">{{from}}</input>
+  //     <i class="fas fa-exchange-alt cnvrt-icon"></i>
+  //     <p style="display: inline-block;">
+  //
+  //     </p>
+  //     <input required class="cnvrt-input from" placeholder="0" v-on:keyup="feetToInches" type="number" step="0.01" v-bind:value=message>{{to}}</input>
+  //
+  //       <button class="back-btn" v-on:click="backFunction">
+  //       &nbsp;<i class="fas fa-arrow-circle-left"></i>&nbsp;BACK</button>
+  //   </div>
+  //   `,
+  //   methods: {
+  //     checkButtonClick: function(event){
+  //       if(Boolean(this.onAppSend)){
+  //       	this.backFunction();
+  //       }
+  //     },
+  //     inchesToFeet: function(){
+  //       if (this.$el.children[1].value == ""){
+  //         this.message = ""
+  //       } else {
+  //         this.message = (this.$el.children[1].value / 12).toFixed(1)
+  //       }
+  //     },
+  //     feetToInches: function(){
+  //       if (this.$el.children[4].value == ""){
+  //         this.$el.children[1].value = ""
+  //       } else {
+  //         this.$el.children[1].value = (this.$el.children[4].value * 12).toFixed(1)
+  //       }
+  //     },
+  //   }
+  // })
+
+  var appDist = new Vue ({
+    el: '#app-dist',
+    data: {
+      message: '',
+      to: 'FT',
+      from: 'IN'
+    },
+    methods: {
+      inchesToFeet: function(){
+        if (this.$el.children[1].value == ""){
+          this.message = ""
+        } else {
+          this.message = (this.$el.children[1].value / 12).toFixed(1)
+        }
+      },
+      feetToInches: function(){
+        if (this.$el.children[4].value == ""){
+          this.$el.children[1].value = ""
+        } else {
+          this.$el.children[1].value = (this.$el.children[4].value * 12).toFixed(1)
+        }
+      },
+      backFunc: function(){
+        this.$el.classList.remove("show")
+        $('#app-start')[0].style.display = "block"
       }
     }
   })
